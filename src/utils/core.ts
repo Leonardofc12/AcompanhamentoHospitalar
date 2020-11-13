@@ -1,8 +1,9 @@
-export const CodClienteValidator = (codCliente: string) => {
+export const CodClienteValidator = (codCliente: Number) => {
     const re = /^[0-9]*$/;
   
-    if (!codCliente || codCliente.length <= 0) return 'O código do cliente não pode ser vazio.';
-    if (!re.test(codCliente)) return 'Código do cliente inválido.';
+    var codigo = codCliente.toString();
+    if (!codCliente || codigo.length <= 0) return 'O código do cliente não pode ser vazio.';
+    if (!re.test(codigo)) return 'Código do cliente inválido.';
   
     return '';
   };

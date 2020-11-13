@@ -3,13 +3,13 @@ import AsyncStorage from '@react-native-community/async-storage';
 import api from '../services/api';
 
 interface AuthState {
-  accessToken: string;
+  token: string;
   user: object;
 }
 
 interface SignInCredentials {
-  email: string;
-  senha: string;
+  CodProntuario: Number;
+  Senha: string;
 }
 
 interface AuthContextData{
@@ -27,12 +27,12 @@ const AuthProvider: React.FC = ({ children }) => {
 
   useEffect(() => {
     async function loadStorageData(): Promise<void> {
-      const [accessToken, user] = await AsyncStorage.multiGet([
-         '@DoYou:token', '@DoYou:user']); 
+      const [token, user] = await AsyncStorage.multiGet([
+         '@MeuProntuario:token', '@MeuProntuario:user']); 
 
-      if(accessToken[1] && user[1]) {
-        api.defaults.headers.authorization = `Bearer ${accessToken[1]}`
-        setData({ accessToken: accessToken[1], user: JSON.parse(user[1])})
+      if(token[1] && user[1]) {
+        api.defaults.headers.authorization = `Bearer ${token[1]}`
+        setData({ token: token[1], user: JSON.parse(user[1])})
       }
       setLoading(false);
     }
@@ -41,27 +41,23 @@ const AuthProvider: React.FC = ({ children }) => {
    }, [])
 
 
-   const signIn = useCallback(async ({email, senha}) => {
-     const response = await api.post('Usuario/Autenticar',{
-       email,
-       senha
-     });
-     console.log(response)
+   const signIn = useCallback(async ({CodProntuario, Senha }) => {
+     
+     const response = await api.post('Usuario/login', { CodProntuario: parseInt(CodProntuario), Senha: Senha });
+     const { token, user } = response.data;
 
-     const { accessToken, user } = response.data;
-     console.log(accessToken, user);
       await AsyncStorage.multiSet([
-        ['@DoYou:token', accessToken],
-        ['@DoYou:user', JSON.stringify(user)]
+        ['@MeuProntuario:token', token],
+        ['@MeuProntuario:user', JSON.stringify(user)]
       ]); 
 
-      setData({ accessToken, user});
+      setData({ token, user});
    }, []);
 
    const signOut = useCallback(async () => {
      await AsyncStorage.multiRemove([
-       '@DoYou:token',
-       '@DoYou:user'
+       '@MeuProntuario:token',
+       '@MeuProntuario:user'
      ]);
 
      setData({} as AuthState);
@@ -76,7 +72,6 @@ const AuthProvider: React.FC = ({ children }) => {
 
 function useAuth(): AuthContextData {
   const context = useContext(AuthContext);
-
   if(!context) {
     throw new Error('useAuth must be use within in AuthProvider');
   }

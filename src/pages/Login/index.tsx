@@ -1,31 +1,38 @@
-import React, { useCallback } from 'react';
-import { View, Text, Image, TextInput, TouchableOpacity, Alert} from 'react-native';
-import api from '../../services/api';
+import React, { useRef, useCallback, useState } from 'react';
+import { View, Image, KeyboardAvoidingView, ScrollView, Platform, ActivityIndicator} from 'react-native';
 import { CodClienteValidator, dtNascimentoValidator } from '../../utils/core';
-import styles, { Date } from './styles';
-import { Navigation } from '../../types';
-import Logo from '../../assets/logouvv.png';
+import { Container, Title } from './styles';
+import Logo from '../../assets/sus-logo.png';
 import Toast from 'react-native-toast-message';
 import RootToast from '../../components/rootToast';
+import { useNavigation } from '@react-navigation/native';
+import { Form } from '@unform/mobile';
+import { FormHandles } from '@unform/core';
+import { useAuth } from '../../hooks/auth';
+import Button from '../../components/Button';
+import Input from '../../components/Input';
 
-type Props = {
-    navigation: Navigation;
-  };
+interface LoginFormData {
+    CodProntuario: Number;
+    DtNascimento: string;
+  }
 
-const Login = ({ navigation }: Props) => {
-    
-    const [CodCliente, setCodCliente] =  React.useState({ value: '', error: '' });
-    const [DtNascimento, setDtNascimento] = React.useState({ value: '', error: '' });
+const Login: React.FC = () => {
 
-    const _onLoginPressed = () => {
+    const navigation = useNavigation();
+    const formRef = useRef<FormHandles>(null);
+    const [loading, setLoading] = useState<boolean>(false);
 
-        const codClienteError = CodClienteValidator(CodCliente.value);
-        const dtNascimentoError = dtNascimentoValidator(DtNascimento.value);
-        
-         if (codClienteError || dtNascimentoError) {
-            setCodCliente({ ...CodCliente, error: codClienteError });
-            setDtNascimento({ ...DtNascimento, error: dtNascimentoError });
+    const { signIn, user } = useAuth();
 
+    const handleSignIn = useCallback(async(data: LoginFormData) => {
+        setLoading(true);
+
+        const codClienteError = CodClienteValidator(data.CodProntuario);
+        const dtNascimentoError = dtNascimentoValidator(data.DtNascimento);
+
+        if (codClienteError || dtNascimentoError) {
+            setLoading(false);
             Toast.show({
                 type: 'error',
                 position: 'top',
@@ -35,18 +42,31 @@ const Login = ({ navigation }: Props) => {
                 autoHide: true,
                 topOffset: 30,
                 bottomOffset: 40
-              });
-
+            });
             return;
-          }
-        const dados = {
-            IdCliente: CodCliente.value,
-            dataNascimento: DtNascimento.value
         }
-        AuthData(dados).then((result) => {
-            console.log(result)
-            
-        }).catch((error) => {
+        try {
+            await signIn({ CodProntuario : data.CodProntuario, Senha: data.DtNascimento})
+            .then((result) => {
+                setLoading(false);
+                navigation.navigate("Dashboard");
+            }).catch((error) => {
+                setLoading(false);
+                Toast.show({
+                    type: 'error',
+                    position: 'top',
+                    text1: 'Erro ao logar!',
+                    text2: 'Não foi possível localizar o paciente.',
+                    visibilityTime: 4000,
+                    autoHide: true,
+                    topOffset: 30,
+                    bottomOffset: 40
+                });
+            });
+        }
+        catch(err) {
+            console.log(err);
+            setLoading(false);
             Toast.show({
                 type: 'error',
                 position: 'top',
@@ -56,41 +76,33 @@ const Login = ({ navigation }: Props) => {
                 autoHide: true,
                 topOffset: 30,
                 bottomOffset: 40
-              });
-        });
-    }
-    const AuthData = useCallback(async (dados) => {
-      return await api.post('Acesso/GetAcesso', dados );
-    }, []);
-    
+            });
+        }
+    }, [])
+
     return (
-        <View style={styles.container}>
-            
-        <RootToast></RootToast>
-            <Image
-                source={Logo}
-                style={styles.logo}>
-            </Image>
-            <TextInput
-                style={styles.input}
-                value={CodCliente.value}
-                onChangeText={text => setCodCliente({ value: text, error: '' })}
-                placeholder="Informe seu código de atendimento"
-            />
-            <TextInput
-                style={styles.input}
-                value={DtNascimento.value}
-                onChangeText={text => setDtNascimento({ value: text, error: '' })}
-                placeholder="Informe sua data de Nascimento"
-            />
-            
-           <TouchableOpacity
-            style={styles.botaoAuth}
-            onPress={_onLoginPressed}
-            >
-                <Text style={styles.botaoText}>Login</Text>
-            </TouchableOpacity>
-        </View>
+        <>
+        <KeyboardAvoidingView style={{ flex: 1}} behavior={Platform.OS === 'ios' ? 'padding' : undefined} enabled>
+        <ScrollView contentContainerStyle={{ flex: 1}} keyboardShouldPersistTaps="handled">
+            <Container>
+                <RootToast></RootToast>
+                <Title>Meu Prontuário</Title>
+            <Image source={Logo} style={{ width: 100, height: 100}}/>
+            <View> 
+                <Title> Faça o seu login </Title>
+            </View>
+            <Form ref={formRef} onSubmit={handleSignIn}>
+                <Input name="CodProntuario" icon="mail" placeholder="Informe seu código de atendimento" autoCorrect={false} autoCapitalize="none"/>
+                <Input name="DtNascimento" icon="lock" placeholder="Informe sua data de Nascimento"  autoCorrect={false} autoCapitalize="none"/>
+            </Form>
+            {
+                !loading ?  <Button onPress={() => formRef.current?.submitForm()}> Entrar </Button> :
+                <ActivityIndicator size="large" color="##91ffc8" />
+            }
+            </Container>
+        </ScrollView>
+        </KeyboardAvoidingView>
+        </>
     )
 }; 
 

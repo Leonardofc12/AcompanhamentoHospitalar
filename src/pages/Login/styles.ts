@@ -1,5 +1,5 @@
 import styled from 'styled-components/native';
-import { StyleSheet } from 'react-native';
+import { Platform, StyleSheet } from 'react-native';
 
 export const Date = styled.Text`
   font-size: 14px; 
@@ -9,6 +9,21 @@ export const Date = styled.Text`
   text-align: left;
   margin-left: 10px;
 `;
+
+export const Container = styled.View`
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+  padding: 0 30px ${Platform.OS === 'android' ? 120 : 40}px;
+`;
+
+export const Title = styled.Text`
+  font-size: 24px;
+  color: #232129;
+  font-family: 'RobotoSlab-Medium';
+  margin: 64px 0 24px;
+`
+
 const styles = StyleSheet.create ({
     container: {
         flex: 1,
@@ -17,36 +32,23 @@ const styles = StyleSheet.create ({
     },
     logo: {
         width: 150,
-        height: 150, 
-        borderRadius: 100
+        height: 150,
     },
     input: {
        marginTop: 10,
        padding: 10,
        width: 300,
        backgroundColor: '#fff',
-       fontSize: 16,
-       fontWeight: 'bold',
-       borderRadius: 3,
-       textAlign: 'center',
-       shadowOpacity: 0.5,
-       shadowRadius: 3,
-       shadowOffset: {
-         height: 0,
-         width: 0,
-       },
-       elevation: 2,
+       
     }, 
     botaoAuth: {
         width: 300,
         height: 42,
         backgroundColor: '#91ffc8',
         marginTop: 10,
-        borderRadius: 4,
         alignItems: "center",
         justifyContent: "center",
         shadowOpacity: 0.5,
-        shadowRadius: 3,
         shadowOffset: {
           height: 0,
           width: 0,
