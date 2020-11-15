@@ -1,10 +1,11 @@
 import React from 'react';
 import { View, Text} from 'react-native';
+import styles from './styles';
 
 const Perfil : React.FC = () => {
     return (
-        <View>
-            <Text> Estou na tela de Perfil </Text>
+        <View style={styles.container}>
+            <Text> Estou na tela Perfil </Text>
         </View>
     )
 }; 

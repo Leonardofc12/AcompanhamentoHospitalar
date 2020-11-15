@@ -4,7 +4,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Dicionario from '../pages/Dicionario';
 import Prontuario from '../pages/Prontuario';
 import Perfil from '../pages/Perfil';
-//import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 const App = createStackNavigator(); 
 const Tab = createBottomTabNavigator();
@@ -13,40 +13,32 @@ const Tab = createBottomTabNavigator();
 function Tabs() {
   return ( 
       <Tab.Navigator 
-    //   screenOptions={({ route }) => ({ 
-    //      tabBarIcon: ({ focused, color, size }) => {
-    //        let iconName = '';
+      screenOptions={({ route }) => ({ 
+         tabBarIcon: ({ focused, color, size }) => {
+           let iconName = '';
 
-    //        if (route.name === 'Perfil') {
-    //          iconName = focused
-    //            ? 'home'
-    //            : 'home';
-    //        }
-    //        else if (route.name === 'Dicionario') {
-    //          iconName = focused ? 'search' : 'search';
-    //        }
-    //        else if (route.name === 'Prontuario') {
-    //          iconName = focused ? 'search' : 'search';
-    //        }
+           if (route.name === 'Perfil') {
+             iconName = focused
+               ? 'user'
+               : 'user';
+           }
+           else if (route.name === 'Dicionario') {
+             iconName = focused ? 'book' : 'book';
+           }
+           else if (route.name === 'Prontuario') {
+             iconName = focused ? 'inbox' : 'inbox';
+           }
            
-    //        return <Icon name={iconName} size={size} color={color} />;
-    //      }, 
-    //    })}
+           return <Icon name={iconName} size={size} color={color} />;
+         }, 
+       })}
        tabBarOptions={{
-         activeTintColor: 'tomato',
+         activeTintColor: '#4787ff',
          inactiveTintColor: 'gray', 
        }}>
-        <Tab.Screen name="Prontuario" component={Prontuario}
-        />
-        {/* <Tab.Screen name="Salvos" component={Saveds} /> */}
-        <Tab.Screen
-        name="Dicionario"
-        component={Dicionario} />
-        <Tab.Screen
-        name="Perfil"
-        component={Perfil} />
-        {/* <Tab.Screen name="Notificacoes" component={Notifications}/>
-        <Tab.Screen name="Perfil" component={Profile} /> */}
+        <Tab.Screen name="Prontuario" component={Prontuario} />
+        <Tab.Screen name="Dicionario" component={Dicionario} />
+        <Tab.Screen name="Perfil" component={Perfil}/>
       </Tab.Navigator> 
   )
 }
@@ -55,7 +47,7 @@ const AppRoutes: React.FC = () => (
   <App.Navigator screenOptions={({ route, navigation }) => ({
    })}>
     <App.Screen
-      name="Dashboard" options={{headerShown: false,
+      name="Dashboard" options={{headerShown: false, //headerTitle: 'Feed',
         cardStyle: { backgroundColor: "#FAFAFA"}}} component={Tabs} />
     
   </App.Navigator>

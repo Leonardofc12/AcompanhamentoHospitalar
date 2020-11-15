@@ -11,9 +11,9 @@ import { createDrawerNavigator } from '@react-navigation/drawer';
 const Drawer = createDrawerNavigator();
 const App: React.FC = () => (
   <NavigationContainer>
-    <StatusBar barStyle="dark-content" backgroundColor="#fff"/>
+    <StatusBar barStyle="dark-content" backgroundColor="#696969"/>
     <AppProvider>
-      <View style={{ flex:1, backgroundColor: "#FAFAFA"}}>
+      <View style={{ flex:1, backgroundColor: "#696969"}}>
       <Routes />
     </View> 
    </AppProvider> 

@@ -1,5 +1,4 @@
 import styled from 'styled-components/native';
-import { StyleSheet } from 'react-native';
 
 export const Container = styled.View`
 background: #fff,
@@ -63,22 +62,4 @@ export const FilterText = styled.TextInput`
   color: #312e38;
   font-size: 16px;
 `;
-
-const styles = StyleSheet.create({  
-  mycard:{
-    margin:5,
-  },
-  container: {
-    flex: 1, alignItems: 'center', justifyContent: 'center'
-  },
-  list: {
-  },
-  item: {
-    flexDirection: 'row', alignItems: 'flex-start', paddingHorizontal: 20, paddingTop: 20, borderWidth: 5  
-  },
-  itemText: {
-    paddingTop: 5, paddingLeft: 10, fontSize: 18
-  }
-});
-
-export default styles;
+   
