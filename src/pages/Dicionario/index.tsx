@@ -5,7 +5,7 @@ import { FlatList, RefreshControl, View } from 'react-native';
 import api from '../../services/api';
 import ListDicionarios from '../../components/ListDicionarios';
 
-interface Dic {
+export interface Dic {
     id: number;
     nome: string;
     descricao: string;
@@ -46,7 +46,7 @@ const Dicionario : React.FC = () => {
           <View style={{flex:1}}>
             <FlatList
                     data={listData}
-                    renderItem={({ item }) => <ListDicionarios id={item.id} nome={item.nome} descricao={item.descricao}/>}
+                    renderItem={({ item }) => <ListDicionarios dicionario={item}/>}
                     keyExtractor={item => item.id.toLocaleString()}
                     refreshControl={
                     <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />

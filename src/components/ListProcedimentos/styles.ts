@@ -6,7 +6,6 @@ export const IconSearch = styled(Icon)`
     top: 20px
 `;
 
-
 const styles = StyleSheet.create({
     mycard:{
         margin:5,

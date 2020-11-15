@@ -35,7 +35,7 @@ const Prontuario : React.FC = () => {
                 <FilterText placeholder="Pesquisar" placeholderTextColor="#000"></FilterText>
                 <Icon name="search" size={30} color="#312e38"/>
             </FilterView>
-            {/* <Categorias/> */}
+            <Categorias/>
             <ListProcedimentos />
           </Content>         
         </Container>

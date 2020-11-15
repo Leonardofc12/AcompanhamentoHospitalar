@@ -1,46 +1,45 @@
-import { Platform, StyleSheet } from 'react-native';
-import Icon from 'react-native-vector-icons/FontAwesome';
+import { Platform, StyleSheet, FlatList} from 'react-native';
 import styled from 'styled-components/native';
+import { Category } from './index';
 
-const styles = StyleSheet.create({
-    postAtividades: {
-        margin: 10,
-        padding: 10,
-        borderRadius: 5,
-        height: 100,
-        backgroundColor: '#323C47',
-        flexDirection: 'row',
-        alignSelf: 'center',
-        justifyContent: 'center',
-        alignItems: 'stretch'
-    },
+export const CategoryContainer = styled.View`
+  margin-top: 6px; 
+  justify-content: center; 
+  align-items: center;
+  background-color: #fff;
+  padding-bottom: 10px;
+  margin-left: 10px;
+`;
 
-    iconAtividades: {
-        marginRight: 10,
-        padding: 8,
-        height: 60,
-        width: 60,
-        borderRadius: 100,
-        alignSelf: 'center',
-        justifyContent: 'center',
-        alignItems: 'stretch'
-    },
+export const CategoriasList = styled(
+    FlatList as new () => FlatList<Category>
+  )`
+    margin-top: 0px;
+  `; 
+  export const CategoryContentActive = styled.TouchableOpacity`
+  align-items: center; 
+  background-color: tomato;
+  padding: 8px 12px;
+  margin-right: 8px;
+  border-radius: 10px;
+`;
 
-    icon: {
-        alignSelf: 'center'
-    },
-
-    checkIconAtividades: {
-        paddingTop: 0,
-        paddingLeft: 1.5,
-        paddingRight: 1,
-        backgroundColor: '#fff',
-        borderRadius: 20,
-        color: "#19B996",
-        position: 'absolute',
-        right: 0,
-        top: 0
-    },
-});
-
-export default styles;
+export const CategoryTextActive = styled.Text`
+  font-size: 16px;
+  font-family: 'RobotoSlab-regular';
+  font-weight: bold;
+  color: #f4ede8;
+`; 
+export const CategoryContent = styled.TouchableOpacity`
+  align-items: center; 
+  background-color: #3e3b47;
+  padding: 8px 12px;
+  margin-right: 8px;
+  border-radius: 10px;
+`;
+export const CategoryText = styled.Text`
+  font-size: 16px;
+  font-family: 'RobotoSlab-regular';
+  font-weight: bold;
+  color: #f4ede8;
+`; 
