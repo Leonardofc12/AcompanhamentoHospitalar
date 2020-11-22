@@ -51,6 +51,7 @@ const Login: React.FC = () => {
                 setLoading(false);
                 navigation.navigate("Dashboard");
             }).catch((error) => {
+                console.log(error)
                 setLoading(false);
                 Toast.show({
                     type: 'error',
@@ -92,8 +93,8 @@ const Login: React.FC = () => {
                 <Title> Faça o seu login </Title>
             </View>
             <Form ref={formRef} onSubmit={handleSignIn}>
-                <Input name="CodProntuario" icon="mail" placeholder="Informe seu código de atendimento" autoCorrect={false} autoCapitalize="none"/>
-                <Input name="DtNascimento" icon="lock" placeholder="Informe sua data de Nascimento"  autoCorrect={false} autoCapitalize="none"/>
+                <Input name="CodProntuario" icon="user" placeholder="Informe seu código de atendimento" autoCorrect={false} autoCapitalize="none"/>
+                <Input name="DtNascimento" icon="calendar" placeholder="Informe sua data de Nascimento"  autoCorrect={false} autoCapitalize="none"/>
             </Form>
             {
                 !loading ?  <Button onPress={() => formRef.current?.submitForm()}> Entrar </Button> :

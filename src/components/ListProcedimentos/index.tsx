@@ -1,53 +1,14 @@
-import React, {useCallback, useState} from 'react';
+import React from 'react';
 import Logo from '../../assets/sus-logo.png';
-import { View, Text, Image, FlatList, RefreshControl } from 'react-native';
+import { View, Text, Image } from 'react-native';
 import { Card } from 'react-native-paper'
 import styles, {IconSearch} from './styles';
-import api from '../../services/api';
+import { Procedimentos } from '../../pages/Prontuario';
 
-// import {useSelector,useDispatch} from 'react-redux'
 
-export interface Review {
-  id: string;
-  name: string;
-}
-
-const ListProcedimentos: React.FC = () => { 
-    // const {data,loading} =  useSelector((state)=>{
-    //     return state
-    // })
-
-    const [refreshing, setRefreshing] = React.useState(false);
-    const [listData, setListData] = React.useState<[]>([]);
-   
-    const onRefresh = useCallback(async () => {
-        setRefreshing(true);
-        try {
-        await api.get('https://acompanhamentohospitalarapi.azurewebsites.net/TermosTecnicos')
-        .then(response => {
-            setListData(response.data);
-            console.log(listData);
-            });
-        setRefreshing(false)
-        } catch (error) {
-        console.error(error);
-        }
-      }, [refreshing]);
-      
-  const [review, setReviews] = useState<Review[]>([
-      {name: 'Leonardo', id: '1'}, 
-      {name: "Vinicius", id: '2'},
-      {name: 'Leonardo', id: '3'}, 
-      {name: "Vinicius", id: '4'},
-      {name: 'Leonardo', id: '5'}, 
-      {name: "Vinicius", id: '6'},
-      {name: 'Leonardo', id: '7'}, 
-      {name: "Vinicius", id: '8'}
-    ]);
-
-  const renderList = ((item)=>{
-    return(
-      <Card style={styles.mycard}>
+const ListProcedimentos: React.FC<Procedimentos> = ({ Procedimento }) => {
+  return (
+    <Card style={styles.mycard}>
         <View style={styles.cardView}>
             <Image
             style={{width:60,height:60,borderRadius:30}}
@@ -56,31 +17,14 @@ const ListProcedimentos: React.FC = () => {
             />
             <View style={styles.row}>
                 <View> 
-                    <Text style={styles.textTitle}>{item.name}</Text>   
-                    <Text style={styles.text}>Exame do dia</Text> 
-                    <Text style={styles.text}>14/11/2020</Text> 
+                    <Text style={styles.textTitle}>{Procedimento.nomeProcedimento}</Text>   
+                    <Text style={styles.text}>{Procedimento.dataRealizacao}</Text> 
+                    <Text style={styles.text}>{Procedimento.funcionario}</Text> 
                 </View>
-                <IconSearch name="download" size={30} color="#312e38"/>
+                <IconSearch icon="download" size={30} color="#312e38" onPress={() => console.log('Pressed')}/>
             </View>
         </View>
      </Card>
-    )
-})
-
-  return (
-    <View style={{flex:1}}>
-        <FlatList
-        style={{flex: 1}}
-        data={review}
-        keyExtractor={(item) => item.id}
-        renderItem={({item}) => {return renderList(item)}}
-        refreshControl={
-            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-            }
-        // onRefresh={()=>fetchData()}
-        // refreshing={loading}
-        />
-    </View>
   );
 };
 

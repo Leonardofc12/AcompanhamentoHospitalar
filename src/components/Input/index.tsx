@@ -1,7 +1,7 @@
 import React, { useRef, useEffect } from 'react';
 import { Container, TextInput, Icon } from './styles';
 import { TextInputProps } from 'react-native';
-import { useField, FormHandles } from '@unform/core';
+import { useField } from '@unform/core';
 
 
 interface InputProps extends TextInputProps {

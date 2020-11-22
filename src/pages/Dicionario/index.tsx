@@ -1,9 +1,10 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import styles, { Container, Title,ViewHeader, Content, FilterView, FilterText} from './styles';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { FlatList, RefreshControl, View } from 'react-native';
 import api from '../../services/api';
 import ListDicionarios from '../../components/ListDicionarios';
+import _ from 'lodash';
 
 export interface Dic {
     id: number;
@@ -16,14 +17,22 @@ const Dicionario : React.FC = () => {
     const [listData, setListData] = React.useState<Dic[]>([]);
     const [figure, setFigure] = useState<boolean>(false);
 
-   
-    const onRefresh = useCallback(async () => {
+    const [filter, setFilter] = useState<String>('');
+    useEffect(() => {
+      GetDados();
+    },[])
+
+    const GetDados = useCallback(async (desc? : string) => {
+      console.log(`TermosTecnicos/GetSignificados/${ desc }`)
+        
+        if(desc == undefined)
+            desc = '';
+      
         setRefreshing(true);
         try {
-        await api.get('https://acompanhamentohospitalarapi.azurewebsites.net/TermosTecnicos')
+        await api.get(`TermosTecnicos/GetSignificados?termo=${ desc }`)
         .then(response => {
             setListData(response.data);
-            console.log(listData);
             });
         setRefreshing(false)
         } catch (error) {
@@ -31,6 +40,12 @@ const Dicionario : React.FC = () => {
         }
       }, [refreshing]);
 
+    const filterfiles = useCallback((input: string) => {
+        setFilter(input);
+        const search = _.debounce(GetDados, 1500);
+        search(input);
+      }, []);
+    
     return (
         <Container>
         <Content>
@@ -39,7 +54,7 @@ const Dicionario : React.FC = () => {
           </ViewHeader> 
           
           <FilterView>
-              <FilterText placeholder="Pesquisar" placeholderTextColor="#000"></FilterText>
+              <FilterText placeholder="Pesquisar" placeholderTextColor="#000" onChangeText={(text) => {filterfiles(text)} }></FilterText>
               <Icon name={ figure == false ? "search" : "home"} size={30} color="#312e38" onPress={() => setFigure(!figure)}/>
           </FilterView>
 
@@ -49,7 +64,7 @@ const Dicionario : React.FC = () => {
                     renderItem={({ item }) => <ListDicionarios dicionario={item}/>}
                     keyExtractor={item => item.id.toLocaleString()}
                     refreshControl={
-                    <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+                    <RefreshControl refreshing={refreshing} onRefresh={GetDados} />
                     }
                     contentContainerStyle={styles.list}
                 />

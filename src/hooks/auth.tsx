@@ -44,6 +44,7 @@ const AuthProvider: React.FC = ({ children }) => {
    const signIn = useCallback(async ({CodProntuario, Senha }) => {
      
      const response = await api.post('Usuario/login', { CodProntuario: parseInt(CodProntuario), Senha: Senha });
+     
      const { token, user } = response.data;
 
       await AsyncStorage.multiSet([

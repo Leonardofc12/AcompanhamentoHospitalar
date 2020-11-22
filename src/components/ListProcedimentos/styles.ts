@@ -1,9 +1,9 @@
 import { Platform, StyleSheet } from 'react-native';
-import Icon from 'react-native-vector-icons/FontAwesome';
 import styled from 'styled-components/native';
+import { IconButton, Colors } from 'react-native-paper';
 
-export const IconSearch = styled(Icon)`
-    top: 20px
+export const IconSearch = styled(IconButton)`
+
 `;
 
 const styles = StyleSheet.create({
