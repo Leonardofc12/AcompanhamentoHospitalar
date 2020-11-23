@@ -47,7 +47,6 @@ const Prontuario : React.FC = () => {
   ])
 
   const filterByCategory = useCallback((value: Type) => {
-    console.log(value)
       setCategory(value);
       loadfiles('', value.nome)
   }, []);
@@ -60,7 +59,6 @@ const Prontuario : React.FC = () => {
   const loadfiles = useCallback(async (filter: String, categoria: string) => {
       setRefreshing(true);
       setListData([]);
-      console.log({ Id : user.id , Categoria: categoria, Filter: filter})
         api.post('Prontuarios/GetProcedimentos', { Id : user.id , Categoria: categoria, Filter: filter} )
         .then(response => {
             setListData(response.data);

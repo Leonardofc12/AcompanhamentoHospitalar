@@ -18,7 +18,7 @@ export interface Usuario {
 }
 
 const Perfil : React.FC = () => {
-  const { user } = useAuth(); 
+  const { user, signOut} = useAuth();
   const [loading, setLoading] = useState<boolean>();
   const [listData, setListData] = React.useState<Usuario[]>([]);
   const [figure, setFigure] = useState<boolean>(false);
@@ -58,7 +58,7 @@ const Perfil : React.FC = () => {
                   </ViewContent> 
               }
             </Content>
-            <Button style={{ backgroundColor: '#FE2E2E' }}> Sair </Button>
+            <Button onPress={signOut} style={{ backgroundColor: '#FE2E2E' }}> Sair </Button>
       </Container>
     )
 }; 

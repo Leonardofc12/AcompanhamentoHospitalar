@@ -27,7 +27,12 @@ const Login: React.FC = () => {
 
     const handleSignIn = useCallback(async(data: LoginFormData) => {
         setLoading(true);
-
+        
+         if(data.CodProntuario == undefined && data.DtNascimento == undefined ) 
+         {
+            setLoading(false);   
+            return;
+         }
         const codClienteError = CodClienteValidator(data.CodProntuario);
         const dtNascimentoError = dtNascimentoValidator(data.DtNascimento);
 

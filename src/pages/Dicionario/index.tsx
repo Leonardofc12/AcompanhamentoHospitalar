@@ -23,8 +23,6 @@ const Dicionario : React.FC = () => {
     },[])
 
     const GetDados = useCallback(async (desc? : string) => {
-      console.log(`TermosTecnicos/GetSignificados/${ desc }`)
-        
         if(desc == undefined)
             desc = '';
       
