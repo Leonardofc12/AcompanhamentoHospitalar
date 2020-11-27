@@ -1,13 +1,14 @@
 import React, { useEffect, useState, useCallback} from 'react';
 import { View, FlatList, RefreshControl } from 'react-native';
 import api from '../../services/api';
-import { Container, Title, ContentRestaurant, ViewContent, ViewHeader, Content, TextHeader, FilterView, FilterText, CategoryContainer, CategoriasList, CategoryContentActive, CategoryTextActive, CategoryContent, CategoryText} from './styles';
+import { Container, Title, ContentProntuario, ViewContent, ViewHeader, Content, TextHeader, FilterView, FilterText, CategoryContainer, CategoriasList, CategoryContentActive, CategoryTextActive, CategoryContent, CategoryText} from './styles';
 import ListProcedimentos from '../../components/ListProcedimentos';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { useAuth } from '../../hooks/auth';
 import { IconSearch } from '../../components/ListProcedimentos/styles';
 import { Usuario } from '../Perfil';
 import _ from 'lodash';
+import RNFetchBlob from 'rn-fetch-blob';
 
 export interface Procedimentos {
   id: string;
@@ -77,6 +78,33 @@ const Prontuario : React.FC = () => {
       api.get(`Usuario/GetUser/${ user.id }`)
       .then(response => { setdataUser(response.data); });
     }
+    const exportProntuario = () => {
+      console.log(user.id)
+       api.post(`/ExportFiles/EnviaEmail?IdPaciente=${ user.id }`)
+        .then(response => {
+          console.log(response)
+            alert("Email enviado!")
+            });
+    }
+    const downloadAll = () => {
+      const android = RNFetchBlob.android
+
+      RNFetchBlob.config({
+          addAndroidDownloads : {
+              useDownloadManager : true,
+              title : 'AcompanhamentoHospitalar.zip',
+              description : 'Acompanhamento Hospitalar',
+              mime : 'application/octet-stream',
+              mediaScannable : true,
+              notification : true,
+          }
+          })
+          .fetch('GET', `https://acompanhamentohospitalarapi.azurewebsites.net//Prontuarios/DownloadAllProcedimentos/${ user.id }`)
+          .then((res) => {
+              android.actionViewIntent(res.path(), 'application/octet-stream')
+          })
+      
+    }
 
     useEffect(() => {
       GetUser();
@@ -86,15 +114,16 @@ const Prontuario : React.FC = () => {
     return (
         <Container>
           <Content> 
-          <ContentRestaurant>
+          <ContentProntuario>
             <ViewContent>
               <TextHeader> Paciente: {dataUser?.nome} </TextHeader> 
               <TextHeader> Data Nascimento: {dataUser?.dataNascimento}  </TextHeader> 
             </ViewContent> 
-          </ContentRestaurant>
+          </ContentProntuario>
             <ViewHeader>
               <Title> Procedimentos</Title>
-              <IconSearch icon="download" size={30} color="#312e38" onPress={() => console.log('Pressed')}/>
+              <IconSearch icon="share" size={30} color="#312e38" style={{marginLeft:100, marginRight: 0}} onPress={exportProntuario}/>
+              <IconSearch icon="download" size={30} color="#312e38" onPress={downloadAll}/>
             </ViewHeader> 
             
             <FilterView>

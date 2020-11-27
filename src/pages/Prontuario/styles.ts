@@ -53,7 +53,7 @@ export const Content = styled.View`
   flex: 1;
 `;
 
-export const ContentRestaurant = styled.View`
+export const ContentProntuario = styled.View`
   flex-direction: row;
   padding: 16px;
   border: 3px; 
